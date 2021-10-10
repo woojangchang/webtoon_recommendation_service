@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Webtoon Recommendation Service</title>
+		<meta name="description" content="Webtoon Recommendation Service" />
+		<meta name="keywords" content="naver webtoon, kakao webtoon, kakaopage webtoon, lezhin comics" />
+		<meta name="author" content="woojangchang" />
+		<link rel="shortcut icon" href="{% static 'images/comic-book.png' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/demo.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/component.css' %}" />
+		<script src="{% static 'js/modernizr.custom.js' %}"></script>
+	</head>
+	<body>
+		<div class="container">
+			<ul id="gn-menu" class="gn-menu-main">
+				<li class="gn-trigger">
+					<a class="gn-icon gn-icon-menu"><span>Menu</span></a>
+					<nav class="gn-menu-wrapper">
+						<div class="gn-scroller">
+							<ul class="gn-menu">
+								<!-- <li class="gn-search-item"> -->
+								<li>
+									<!-- <input placeholder="Search" type="search" class="gn-search"> -->
+									<!-- <a class="gn-icon gn-icon-earth">Search</a> -->
+									<ul>
+										<li><a href="{% url 'search_main' %}" class="gn-icon gn-icon-illustrator">그림 작가로 웹툰 추천</a></li>
+										<li><a href="{% url 'story_main' %}" class="gn-icon gn-icon-article">스토리 및 장르로 웹툰 추천</a></li>
+										<li><a href="{% url 'input' %}" class="gn-icon gn-icon-pictures">이미지 입력으로 웹툰 추천</a></li>
+									</ul>
+								</li>
+								<li>
+									<a class="gn-icon gn-icon-download">Downloads</a>
+									<ul class="gn-submenu">
+										<li><a class="gn-icon gn-icon-archive" href="{% url 'download' %}">Encoder Model</a></li>
+									</ul>
+								</li>
+								<!-- <li><a class="gn-icon gn-icon-cog">Settings</a></li> -->
+								<li><a href="{% url 'help' %}" class="gn-icon gn-icon-help">Help</a></li>
+								<!-- <li>
+									<a class="gn-icon gn-icon-archive">Archives</a>
+									<ul class="gn-submenu">
+										<li><a class="gn-icon gn-icon-article">Articles</a></li>
+										<li><a class="gn-icon gn-icon-pictures">Images</a></li>
+										<li><a class="gn-icon gn-icon-videos">Videos</a></li>
+									</ul>
+								</li> -->
+							</ul>
+						</div><!-- /gn-scroller -->
+					</nav>
+				</li>
+				<li><a href="/">웹툰 추천 서비스</a></li>
+				<li><a class="codrops-icon" href="https://comic.naver.com/webtoon/weekday" target="_blank"><span>네이버 웹툰</span></a></li>
+				<li><a class="codrops-icon" href="https://webtoon.kakao.com/" target="_blank"><span>카카오 웹툰</span></a></li>
+				<li><a class="codrops-icon" href="https://page.kakao.com/main?categoryUid=10&subCategoryUid=10000" target="_blank"><span>카카오페이지 웹툰</span></a></li>
+				<li><a class="codrops-icon" href="https://www.lezhin.com/ko" target="_blank"><span>레진 코믹스</span></a></li>
+				<li><a class="codrops-icon codrops-icon-drop" href="https://github.com/woojangchang/webtoon_recommendation_service" target="_blank"><span>About</span></a></li>
+			</ul>
+			<header>
+				<h1>당신이 원하는 웹툰 <span> <a href="{% url 'search_main' %}">비슷한 그림체</a>, 
+					<a href="{% url 'story_main' %}">비슷한 스토리</a>,
+					<a href="{% url 'input' %}">비슷한 이미지</a>를 가진, <br>당신이 모르던 웹툰을 추천해드립니다!!!</span></h1>	
+				<img src="{% static 'images/webtoons.png' %}">
+			</header> 
+		</div><!-- /container -->
+		<script src="{% static 'js/classie.js' %}"></script>
+		<script src="{% static 'js/gnmenu.js' %}"></script>
+		<script>
+			new gnMenu( document.getElementById( 'gn-menu' ) );
+		</script>
+	</body>
+</html>

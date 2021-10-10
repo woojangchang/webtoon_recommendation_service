@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Webtoon Recommendation Service</title>
+		<meta name="description" content="Webtoon Recommendation Service" />
+		<meta name="keywords" content="naver webtoon, kakao webtoon, kakaopage webtoon, lezhin comics" />
+		<meta name="author" content="woojangchang" />
+		
+		<link rel="shortcut icon" href="{% static 'images/comic-book.png' %}">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/paginate.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/demo.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/component.css' %}" />
+		<script src="{% static 'js/modernizr.custom.js' %}"></script>
+		
+
+
+		<style>
+			body {
+				background-color: white;
+			}
+			.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  width: 58%;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+.col,.col-1,.col-10,.col-11,.col-12,.col-2,.col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-auto,.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-auto,.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-auto,.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-auto,.col-xl,.col-xl-1,.col-xl-10,.col-xl-11,.col-xl-12,.col-xl-2,.col-xl-3,.col-xl-4,.col-xl-5,.col-xl-6,.col-xl-7,.col-xl-8,.col-xl-9,.col-xl-auto{
+	position:relative;
+	width:100%;
+	min-height:1px;
+	padding-right:15px;
+	padding-left:15px
+}
+
+.col{
+	-ms-flex-preferred-size:0;
+	flex-basis:0;
+	-ms-flex-positive:1;
+	flex-grow:1;
+	max-width:100%
+}
+
+.col-auto{
+	-ms-flex:0 0 auto;
+	flex:0 0 auto;
+	width:auto;
+	max-width:none
+}
+
+.col-1{
+	-ms-flex:0 0 8.333333%;
+	flex:0 0 8.333333%;
+	max-width:8.333333%
+}
+
+.col-2{
+	-ms-flex:0 0 16.666667%;
+	flex:0 0 16.666667%;
+	max-width:16.666667%
+}
+
+.col-3{
+	-ms-flex:0 0 25%;
+	flex:0 0 25%;
+	max-width:25%
+}
+
+.col-4{
+	-ms-flex:0 0 33.333333%;
+	flex:0 0 33.333333%;
+	max-width:33.333333%
+}
+	
+.col-5{
+	-ms-flex:0 0 41.666667%;
+	flex:0 0 41.666667%;
+	max-width:41.666667%
+}
+
+.col-6{
+	-ms-flex:0 0 50%;
+	flex:0 0 50%;
+	max-width:50%
+}
+
+.col-7{
+	-ms-flex:0 0 58.333333%;
+	flex:0 0 58.333333%;
+	max-width:58.333333%
+}
+
+.col-8{
+	-ms-flex:0 0 66.666667%;
+	flex:0 0 66.666667%;
+	max-width:66.666667%
+}
+
+.col-9{
+	-ms-flex:0 0 75%;
+	flex:0 0 75%;
+	max-width:75%
+}
+
+.col-10{
+	-ms-flex:0 0 83.333333%;
+	flex:0 0 83.333333%;
+	max-width:83.333333%
+}
+
+.col-11{
+	-ms-flex:0 0 91.666667%;
+	flex:0 0 91.666667%;
+	max-width:91.666667%
+}
+
+.col-12{
+	-ms-flex:0 0 100%;
+	flex:0 0 100%;
+	max-width:100%}
+
+.row{
+	display:-ms-flexbox;
+	display:flex;
+	-ms-flex-wrap:wrap;
+	flex-wrap:wrap;
+	margin-right:-15px;
+	margin-left:-15px
+}
+
+
+
+		</style>
+		
+	</head>
+	<body>
+		<div class="container">
+			<ul id="gn-menu" class="gn-menu-main">
+				<li class="gn-trigger">
+					<a class="gn-icon gn-icon-menu"><span>Menu</span></a>
+					<nav class="gn-menu-wrapper">
+						<div class="gn-scroller">
+							<ul class="gn-menu">
+								<!-- <li class="gn-search-item"> -->
+								<li>
+									<!-- <input placeholder="Search" type="search" class="gn-search"> -->
+									<!-- <a class="gn-icon gn-icon-earth">Search</a> -->
+									<ul>
+										<li><a href="{% url 'search_main' %}" class="gn-icon gn-icon-illustrator">그림 작가로 웹툰 추천</a></li>
+										<li><a href="{% url 'story_main' %}" class="gn-icon gn-icon-article">스토리 및 장르로 웹툰 추천</a></li>
+										<li><a href="{% url 'input' %}" class="gn-icon gn-icon-pictures">이미지 입력으로 웹툰 추천</a></li>
+									</ul>
+								</li>
+								<li>
+									<a class="gn-icon gn-icon-download">Downloads</a>
+									<ul class="gn-submenu">
+										<li><a class="gn-icon gn-icon-archive" href="{% url 'download' %}">Encoder Model</a></li>
+									</ul>
+								</li>
+								<!-- <li><a class="gn-icon gn-icon-cog">Settings</a></li> -->
+								<li><a href="{% url 'help' %}" class="gn-icon gn-icon-help">Help</a></li>
+								<!-- <li>
+									<a class="gn-icon gn-icon-archive">Archives</a>
+									<ul class="gn-submenu">
+										<li><a class="gn-icon gn-icon-article">Articles</a></li>
+										<li><a class="gn-icon gn-icon-pictures">Images</a></li>
+										<li><a class="gn-icon gn-icon-videos">Videos</a></li>
+									</ul>
+								</li> -->
+							</ul>
+						</div><!-- /gn-scroller -->
+					</nav>
+				</li>
+				<li><a href="/">웹툰 추천 서비스</a></li>
+				<li><a class="codrops-icon" href="https://comic.naver.com/webtoon/weekday" target="_blank"><span>네이버 웹툰</span></a></li>
+				<li><a class="codrops-icon" href="https://webtoon.kakao.com/" target="_blank"><span>카카오 웹툰</span></a></li>
+				<li><a class="codrops-icon" href="https://page.kakao.com/main?categoryUid=10&subCategoryUid=10000" target="_blank"><span>카카오페이지 웹툰</span></a></li>
+				<li><a class="codrops-icon" href="https://www.lezhin.com/ko" target="_blank"><span>레진 코믹스</span></a></li>
+				<li><a class="codrops-icon codrops-icon-drop" href="https://github.com/woojangchang/webtoon_recommendation_service" target="_blank"><span>About</span></a></li>
+			</ul>
+			<header style="color:#34495e; padding-top: 7%;">
+				<div>
+					<h1>이미지 입력으로 웹툰 추천</h1>
+				</div>
+				<h5>※ 한 개의 이미지만으로는 결과가 정확하지 않을 수 있습니다.</h5>
+				<h5>※ 입력하신 이미지는 서버에 절대 저장되지 않습니다.</h5>
+				<form enctype="multipart/form-data" action="/main/input/" method="POST">{% csrf_token %}
+					하단 버튼을 통해 파일을 업로드 해주세요.(.png, .jpg 파일만 가능합니다.)<br>
+					<div class="input-group">
+						<input id="fileInput" name="fileInput" type="file" class="form-control" style="width: 75%; font-size: 20px; padding: 5px; background-color: white;border: 2px solid #34495e;">
+						<span class="input-group-btn" style="padding-left: 10px;display: inline-block;"><input type="submit" class="btn btn-success" value="파일 제출"
+							style="height:45px; font-size: 20px;  padding: 3px; border-width: 3px; padding-left: 25px; padding-right: 25px; background-color: #1d2329;
+							color:white;"></span>
+					</div>
+				</form>
+
+				<div class="container" style="padding-right:25%; padding-left: 15px;">
+					
+					{% if top10 %}
+					<div class="row" style="padding-top:50px">
+						<h2>입력하신 이미지와 비슷한 그림체를 가진 작가의 작품 목록</h2>
+					</div>
+
+					{% for value, illustrator, infos in top10 %}
+					<div class="row" style="padding-top:10px; padding-bottom: 10px;"><h3>{{illustrator}} : {{value|stringformat:".2f"}}%</h3></div>
+					<div class="row">
+						{% for info in infos %}
+						<div class="col-auto" style="padding-bottom:5px">
+							<div class="w3-card-4" style="width:100px">
+								<a href="{{info.0}}" target="_blank"><img src="{{ info.1 }}" style="width: 100%;"></a>
+							<div class="w3-center" style="height:100px"><p>{{ info.2 }}</p><p style="font-size: 5px;">{{ info.3 }}</p></div>
+							</div>	
+						</div>
+						{% endfor %}
+					</div>
+					<div class="row" style="padding-bottom: 40px;"></div>
+					{% endfor %}
+					{% elif response %}
+					<div class="row"  style="padding-top: 50px;"><h2>{{ response }}</h2></div>
+					{% endif %}
+				</div>
+
+			
+			
+
+			</header>
+		</div><!-- /container -->
+		<script src="{% static 'js/classie.js' %}"></script>
+		<script src="{% static 'js/gnmenu.js' %}"></script>
+		<script>
+			new gnMenu( document.getElementById( 'gn-menu' ) );
+		</script>
+
+		
+	</body>
+</html>

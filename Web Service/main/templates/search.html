@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Webtoon Recommendation Service</title>
+		<meta name="description" content="Webtoon Recommendation Service" />
+		<meta name="keywords" content="naver webtoon, kakao webtoon, kakaopage webtoon, lezhin comics" />
+		<meta name="author" content="woojangchang" />
+		
+		<link rel="shortcut icon" href="{% static 'images/comic-book.png' %}">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/paginate.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/demo.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/component.css' %}" />
+		<script src="{% static 'js/modernizr.custom.js' %}"></script>
+
+
+		<style>
+body {
+	background-color: white;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  width: 58%;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+.col,.col-1,.col-10,.col-11,.col-12,.col-2,.col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-auto,.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-auto,.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-auto,.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-auto,.col-xl,.col-xl-1,.col-xl-10,.col-xl-11,.col-xl-12,.col-xl-2,.col-xl-3,.col-xl-4,.col-xl-5,.col-xl-6,.col-xl-7,.col-xl-8,.col-xl-9,.col-xl-auto{
+	position:relative;
+	width:100%;
+	min-height:1px;
+	padding-right:15px;
+	padding-left:15px
+}
+
+.col{
+	-ms-flex-preferred-size:0;
+	flex-basis:0;
+	-ms-flex-positive:1;
+	flex-grow:1;
+	max-width:100%
+}
+
+.col-auto{
+	-ms-flex:0 0 auto;
+	flex:0 0 auto;
+	width:auto;
+	max-width:none
+}
+
+.col-1{
+	-ms-flex:0 0 8.333333%;
+	flex:0 0 8.333333%;
+	max-width:8.333333%
+}
+
+.col-2{
+	-ms-flex:0 0 16.666667%;
+	flex:0 0 16.666667%;
+	max-width:16.666667%
+}
+
+.col-3{
+	-ms-flex:0 0 25%;
+	flex:0 0 25%;
+	max-width:25%
+}
+
+.col-4{
+	-ms-flex:0 0 33.333333%;
+	flex:0 0 33.333333%;
+	max-width:33.333333%
+}
+	
+.col-5{
+	-ms-flex:0 0 41.666667%;
+	flex:0 0 41.666667%;
+	max-width:41.666667%
+}
+
+.col-6{
+	-ms-flex:0 0 50%;
+	flex:0 0 50%;
+	max-width:50%
+}
+
+.col-7{
+	-ms-flex:0 0 58.333333%;
+	flex:0 0 58.333333%;
+	max-width:58.333333%
+}
+
+.col-8{
+	-ms-flex:0 0 66.666667%;
+	flex:0 0 66.666667%;
+	max-width:66.666667%
+}
+
+.col-9{
+	-ms-flex:0 0 75%;
+	flex:0 0 75%;
+	max-width:75%
+}
+
+.col-10{
+	-ms-flex:0 0 83.333333%;
+	flex:0 0 83.333333%;
+	max-width:83.333333%
+}
+
+.col-11{
+	-ms-flex:0 0 91.666667%;
+	flex:0 0 91.666667%;
+	max-width:91.666667%
+}
+
+.col-12{
+	-ms-flex:0 0 100%;
+	flex:0 0 100%;
+	max-width:100%}
+
+.row{
+	display:-ms-flexbox;
+	display:flex;
+	-ms-flex-wrap:wrap;
+	flex-wrap:wrap;
+	margin-right:-15px;
+	margin-left:-15px
+}
+
+
+
+		</style>
+		
+	</head>
+	<body>
+		<div class="container">
+			<ul id="gn-menu" class="gn-menu-main">
+				<li class="gn-trigger">
+					<a class="gn-icon gn-icon-menu"><span>Menu</span></a>
+					<nav class="gn-menu-wrapper">
+						<div class="gn-scroller">
+							<ul class="gn-menu">
+								<!-- <li class="gn-search-item"> -->
+								<li>
+									<!-- <input placeholder="Search" type="search" class="gn-search"> -->
+									<!-- <a class="gn-icon gn-icon-earth">Search</a> -->
+									<ul>
+										<li><a href="{% url 'search_main' %}" class="gn-icon gn-icon-illustrator">그림 작가로 웹툰 추천</a></li>
+										<li><a href="{% url 'story_main' %}" class="gn-icon gn-icon-article">스토리 및 장르로 웹툰 추천</a></li>
+										<li><a href="{% url 'input' %}" class="gn-icon gn-icon-pictures">이미지 입력으로 웹툰 추천</a></li>
+									</ul>
+								</li>
+								<li>
+									<a class="gn-icon gn-icon-download">Downloads</a>
+									<ul class="gn-submenu">
+										<li><a class="gn-icon gn-icon-archive" href="{% url 'download' %}">Encoder Model</a></li>
+									</ul>
+								</li>
+								<!-- <li><a class="gn-icon gn-icon-cog">Settings</a></li> -->
+								<li><a href="{% url 'help' %}" class="gn-icon gn-icon-help">Help</a></li>
+								<!-- <li>
+									<a class="gn-icon gn-icon-archive">Archives</a>
+									<ul class="gn-submenu">
+										<li><a class="gn-icon gn-icon-article">Articles</a></li>
+										<li><a class="gn-icon gn-icon-pictures">Images</a></li>
+										<li><a class="gn-icon gn-icon-videos">Videos</a></li>
+									</ul>
+								</li> -->
+							</ul>
+						</div><!-- /gn-scroller -->
+					</nav>
+				</li>
+				<li><a href="/">웹툰 추천 서비스</a></li>
+				<li><a class="codrops-icon" href="https://comic.naver.com/webtoon/weekday" target="_blank"><span>네이버 웹툰</span></a></li>
+				<li><a class="codrops-icon" href="https://webtoon.kakao.com/" target="_blank"><span>카카오 웹툰</span></a></li>
+				<li><a class="codrops-icon" href="https://page.kakao.com/main?categoryUid=10&subCategoryUid=10000" target="_blank"><span>카카오페이지 웹툰</span></a></li>
+				<li><a class="codrops-icon" href="https://www.lezhin.com/ko" target="_blank"><span>레진 코믹스</span></a></li>
+				<li><a class="codrops-icon codrops-icon-drop" href="https://github.com/woojangchang/webtoon_recommendation_service" target="_blank"><span>About</span></a></li>
+			</ul>
+			<header style="color:#34495e; padding-top: 7%;">
+				<div>
+					<h1>그림 작가로 웹툰 추천</h1>
+				</div>
+				<h5>※ 신인 작가의 경우 결과가 정확하지 않을 수 있습니다.</h5>
+				<form action="/main/search/searching/" method="POST">{% csrf_token %}
+					<div class="input-group">
+						<input class="form-control" id="searchInput" name="searchInput" type="text"
+						 placeholder="작가 명을 입력하세요." autocomplete="off" onkeypress="if( event.keyCode == 13 )"
+						 style="width: 75%; font-size: 20px; padding: 10px;">
+						<span class="input-group-btn" style="display: inline-block;">
+							<input type="submit" class="btn btn-success" value="검색" 
+							style="height:45px; font-size: 20px;  padding: 3px; border-width: 3px; padding-left: 25px; padding-right: 25px; background-color: #1d2329;
+							color:white;">
+						</span>
+					</div>
+				</form>
+
+				<div class="container" style="padding-right:25%; padding-left: 15px;">
+					
+					{% if top10 %}
+					<div class="row" style="padding-top:50px">
+						<h2>검색하신</h2> <h2 style="color:red; padding-right:5px; padding-left:5px">{{illustrator}} </h2> <h2> 작가의 작품 목록</h2>
+					</div>
+					<div class="row">
+						{% for link0, thumbnail0, title0, platform0 in info %}
+						<div class="col-auto" style="padding-bottom:5px">
+							<div class="w3-card-4" style="width:100px">
+								<a href="{{link0}}" target="_blank"><img src="{{ thumbnail0 }}" alt="" style="width: 100%;"></a>
+							<div class="w3-center" style="height:100px"><p>{{ title0 }}</p><p style="font-size: 5px;">{{ platform0 }}</p></div>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+
+					<div class="row" style="padding-top:50px">
+						<h2 style="color:red; padding-right:5px; padding-left:5px;">{{illustrator}}</h2><h2>작가와 비슷한 그림체를 가진 작가의 작품 목록</h2>
+					</div>
+
+					{% for value, illustrator, infos in top10 %}
+					<div class="row" style="padding-top:10px; padding-bottom: 10px;"><h3>{{illustrator}} : {{value|stringformat:".2f"}}%</h3></div>
+					<div class="row">
+						{% for info in infos %}
+						<div class="col-auto" style="padding-bottom:5px">
+							<div class="w3-card-4" style="width:100px">
+								<a href="{{info.0}}" target="_blank"><img src="{{ info.1 }}" style="width: 100%;"></a>
+							<div class="w3-center" style="height:100px"><p>{{ info.2 }}</p><p style="font-size: 5px;">{{ info.3 }}</p></div>
+							</div>	
+						</div>
+						{% endfor %}
+					</div>
+					<div class="row" style="padding-bottom: 40px;"></div>
+					{% endfor %}
+					{% elif response %}
+					<div class="row"  style="padding-top: 50px;"><h2>{{ response }}</h2></div>
+					{% endif %}
+				</div>
+
+			
+			<!-- 페이징처리 시작 -->
+			{% if top10 %}
+			<ul class="pagination justify-content-center" style="padding-left: 30%; padding-right: 30%;">
+				<!-- 이전페이지 -->
+				{% if top10.has_previous %}
+				<li class="page-item">
+					<a class="page-link" href="?page={{ top10.previous_page_number }}">이전</a>
+				</li>
+				{% else %}
+				<li class="page-item disabled">
+					<a class="page-link" tabindex="-1" aria-disabled="true" href="#" onclick="return false;">이전</a>
+				</li>
+				{% endif %}
+				<!-- 페이지리스트 -->
+				{% for page_number in top10.paginator.page_range %}
+				{% if page_number >= top10.number|add:-3 and page_number <= top10.number|add:3 %}
+					{% if page_number == top10.number %}
+					<li class="page-item active" aria-current="page">
+						<a class="page-link" href="#" onclick="return false;">{{ page_number }}</a>
+					</li>
+					{% else %}
+					<li class="page-item">
+						<a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+					</li>
+					{% endif %}
+				{% endif %}
+				{% endfor %}
+				<!-- 다음페이지 -->
+				{% if top10.has_next %}
+				<li class="page-item">
+					<a class="page-link" href="?page={{ top10.next_page_number }}">다음</a>
+				</li>
+				{% else %}
+				<li class="page-item disabled">
+					<a class="page-link" tabindex="-1" aria-disabled="true" href="#" onclick="return false;">다음</a>
+				</li>
+				{% endif %}
+			</ul>		
+			{% endif %}
+
+			</header>
+		</div><!-- /container -->
+		<script src="{% static 'js/classie.js' %}"></script>
+		<script src="{% static 'js/gnmenu.js' %}"></script>
+		<script>
+			new gnMenu( document.getElementById( 'gn-menu' ) );
+		</script>
+<script>
+	function autocomplete(inp, arr) {
+	  /*the autocomplete function takes two arguments,
+	  the text field element and an array of possible autocompleted values:*/
+	  var currentFocus;
+	  /*execute a function when someone writes in the text field:*/
+	  inp.addEventListener("input", function(e) {
+		  var a, b, i, val = this.value;
+		  /*close any already open lists of autocompleted values*/
+		  closeAllLists();
+		  if (!val) { return false;}
+		  currentFocus = -1;
+		  /*create a DIV element that will contain the items (values):*/
+		  a = document.createElement("DIV");
+		  a.setAttribute("id", this.id + "autocomplete-list");
+		  a.setAttribute("class", "autocomplete-items");
+		  /*append the DIV element as a child of the autocomplete container:*/
+		  this.parentNode.appendChild(a);
+
+		  // limit of elements
+		  var count = 13;
+		  /*for each item in the array...*/
+		  for (i = 0; i < arr.length; i++) {
+			/*check if the item starts with the same letters as the text field value:*/
+			if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+
+			  // limiting elements
+			  if (!count--) break;
+
+			  /*create a DIV element for each matching element:*/
+			  b = document.createElement("DIV");
+			  /*make the matching letters bold:*/
+			  b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+			  b.innerHTML += arr[i].substr(val.length);
+			  /*insert a input field that will hold the current array item's value:*/
+			  b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+			  /*execute a function when someone clicks on the item value (DIV element):*/
+			  b.addEventListener("click", function(e) {
+				  /*insert the value for the autocomplete text field:*/
+				  inp.value = this.getElementsByTagName("input")[0].value;
+				  /*close the list of autocompleted values,
+				  (or any other open lists of autocompleted values:*/
+				  closeAllLists();
+			  });
+			  a.appendChild(b);
+			}
+		  }
+	  });
+	  /*execute a function presses a key on the keyboard:*/
+	  inp.addEventListener("keydown", function(e) {
+		  var x = document.getElementById(this.id + "autocomplete-list");
+		  if (x) x = x.getElementsByTagName("div");
+		  if (e.keyCode == 40) {
+			/*If the arrow DOWN key is pressed,
+			increase the currentFocus variable:*/
+			currentFocus++;
+			/*and and make the current item more visible:*/
+			addActive(x);
+		  } else if (e.keyCode == 38) { //up
+			/*If the arrow UP key is pressed,
+			decrease the currentFocus variable:*/
+			currentFocus--;
+			/*and and make the current item more visible:*/
+			addActive(x);
+		  } else if (e.keyCode == 13) {
+			if (currentFocus > -1) {
+			  /*and simulate a click on the "active" item:*/
+			  if (x) x[currentFocus].click();
+			}
+		  }
+	  });
+	  function addActive(x) {
+		/*a function to classify an item as "active":*/
+		if (!x) return false;
+		/*start by removing the "active" class on all items:*/
+		removeActive(x);
+		if (currentFocus >= x.length) currentFocus = 0;
+		if (currentFocus < 0) currentFocus = (x.length - 1);
+		/*add class "autocomplete-active":*/
+		x[currentFocus].classList.add("autocomplete-active");
+	  }
+	  function removeActive(x) {
+		/*a function to remove the "active" class from all autocomplete items:*/
+		for (var i = 0; i < x.length; i++) {
+		  x[i].classList.remove("autocomplete-active");
+		}
+	  }
+	  function closeAllLists(elmnt) {
+		/*close all autocomplete lists in the document,
+		except the one passed as an argument:*/
+		var x = document.getElementsByClassName("autocomplete-items");
+		for (var i = 0; i < x.length; i++) {
+		  if (elmnt != x[i] && elmnt != inp) {
+			x[i].parentNode.removeChild(x[i]);
+		  }
+		}
+	  }
+	  /*execute a function when someone clicks in the document:*/
+	  document.addEventListener("click", function (e) {
+		  closeAllLists(e.target);
+	  });
+	}
+	var illus = {{illustrators|safe}}
+	/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+	autocomplete(document.getElementById("searchInput"), illus);
+</script>
+		
+	</body>
+</html>
