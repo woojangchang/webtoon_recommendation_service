@@ -219,7 +219,7 @@ body {
 					</div>
 				</form>
 
-				<div class="container" style="padding-right:25%; padding-left: 15px;">
+				<div class="container" style="padding-right:20%; padding-left: 1%;">
 					
 					{% if top10 %}
 					<div class="row" style="padding-top:50px">
@@ -228,7 +228,7 @@ body {
 					<div class="row">
 						{% for link0, thumbnail0, title0, platform0 in info %}
 						<div class="col-auto" style="padding-bottom:5px">
-							<div class="w3-card-4" style="width:100px">
+							<div class="w3-card-4" style="width:90px">
 								<a href="{{link0}}" target="_blank"><img src="{{ thumbnail0 }}" alt="" style="width: 100%;"></a>
 							<div class="w3-center" style="height:100px"><p>{{ title0 }}</p><p style="font-size: 5px;">{{ platform0 }}</p></div>
 							</div>
@@ -245,7 +245,7 @@ body {
 					<div class="row">
 						{% for info in infos %}
 						<div class="col-auto" style="padding-bottom:5px">
-							<div class="w3-card-4" style="width:100px">
+							<div class="w3-card-4" style="width:90px">
 								<a href="{{info.0}}" target="_blank"><img src="{{ info.1 }}" style="width: 100%;"></a>
 							<div class="w3-center" style="height:100px"><p>{{ info.2 }}</p><p style="font-size: 5px;">{{ info.3 }}</p></div>
 							</div>	

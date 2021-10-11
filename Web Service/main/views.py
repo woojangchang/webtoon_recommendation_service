@@ -196,6 +196,7 @@ def story(req, title, wgenre, wauthor):
             'info':info0,
             'title':title,
             'story':story,
+            'writer':writer0,
             # 'top10': top10,
             'top10' : page_obj,
             'titles':j_tls,
