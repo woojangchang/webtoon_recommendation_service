@@ -8,7 +8,9 @@ from django.urls import reverse
 from django.http.response import HttpResponse
 from django.core.paginator import Paginator
 
-cs = pd.read_csv('data/cosine_similarity.csv', index_col=0)
+# cs = pd.read_csv('data/cosine_similarity.csv', index_col=0)
+cs_npz = np.load('data/cosine_similarity.npz', allow_pickle=True)
+cs = pd.DataFrame(cs_npz['v'], index=cs_npz['idx'], columns=cs_npz['idx'])
 illustrators = list(cs.columns.sort_values())
 j_ill = json.dumps(illustrators)
 
